@@ -50,7 +50,7 @@ function updateElement(elementId, content) {
 // Function to make an AJAX request with retry logic
 function makeRequest(inputUrl, retries = 4) {
     $.ajax({
-        url: `https://vkr.vercel.app/server?vkr=${inputUrl}`,
+        url: `https://vkrdownloader.vercel.app/server?vkr=${inputUrl}`,
         type: "GET",
         cache: true,
         async: true,
