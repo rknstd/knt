@@ -50,7 +50,7 @@ function updateElement(elementId, content) {
 // Function to make an AJAX request with retry logic
 function makeRequest(inputUrl, retries = 4) {
     $.ajax({
-        url: `https://vkrdownloader.vercel.app/server?vkr=${inputUrl}`,
+        url: `https://knt.vercel.app/server?vkr=${inputUrl}`,
         type: "GET",
         cache: true,
         async: true,
@@ -117,7 +117,7 @@ function handleSuccessResponse(data, inputUrl) {
 
         generateDownloadButtons(data);
     } else {
-        alert("Issue: Unable to retrieve the download link. Please check the URL and contact us on Social Media @TheOfficialVKr.");
+        alert("Issue: Unable to retrieve the download link. Please check the URL and contact us on Social Media @ariasu._");
         document.getElementById("loading").style.display = "none";
     }
 }
@@ -160,7 +160,7 @@ function generateDownloadButtons(videoData) {
             ["mp3", "360", "720", "1080"].forEach(quality => {
                 downloadContainer.innerHTML += `
                     <iframe style='border:0;outline:none;width:100%;max-height:45px;height:45px !important;' 
-                        src='https://vkrdownloader.vercel.app/server/dlbtn.php?q=${quality}&vkr=${videoSource}'></iframe>`;
+                        src='https://knt.vercel.app/server/dlbtn.php?q=${quality}&vkr=${videoSource}'></iframe>`;
             });
         }
     } else {
@@ -169,9 +169,9 @@ function generateDownloadButtons(videoData) {
     }
 
     if (downloadContainer.innerHTML === "") {
-        alert("Server Down due to Too Many Requests. Please contact us on Social Media @TheOfficialVKr.");
+        alert("Server Down due to Too Many Requests. Please contact us on Social Media @ariasu._");
         document.getElementById("container").style.display = "none";
-        location.href = `https://vkrdownloader.vercel.app/download.php?vkr=${inputUrl}`;
+        location.href = `https://knt.vercel.app/download.php?vkr=${inputUrl}`;
     }
 }
 
