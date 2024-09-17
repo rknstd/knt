@@ -1,11 +1,11 @@
-// Configuration for colors based on formats
+// Konfigurasi warna berdasarkan format
 const formatColors = {
     greenFormats: ["17", "18", "22"],
     blueFormats: ["139", "140", "141", "249", "250", "251", "599", "600"],
     defaultColor: "red"
 };
 
-// Function to get the background color for download buttons
+// Berfungsi untuk mendapatkan warna latar belakang tombol download
 function getBackgroundColor(downloadUrlItag) {
     if (formatColors.greenFormats.includes(downloadUrlItag)) {
         return "green";
@@ -16,12 +16,12 @@ function getBackgroundColor(downloadUrlItag) {
     }
 }
 
-// Function to handle the "Download" button click
+// Berfungsi untuk menangani klik tombol "Unduh".
 function openbox() {
     document.getElementById("loading").style.display = "initial";
 }
 
-// Function to debounce the download button click event to avoid multiple rapid requests
+// Berfungsi untuk melakukan debounce pada acara klik tombol unduh untuk menghindari beberapa permintaan cepat
 function debounce(func, wait) {
     let timeout;
     return function(...args) {
@@ -30,24 +30,24 @@ function debounce(func, wait) {
     };
 }
 
-// Function to get YouTube video IDs from a URL
+// Berfungsi untuk mendapatkan ID video YouTube dari suatu URL
 function getYouTubeVideoIds(url) {
     const regExp = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
     const match = url.match(regExp);
     return (match && match[1]) ? match[1] : null;
 }
 
-// Function to sanitize HTML content before injecting into the DOM
+// Berfungsi untuk membersihkan konten HTML sebelum disuntikkan ke DOM
 function sanitizeContent(content) {
-    return DOMPurify.sanitize(content); // Use DOMPurify to sanitize HTML
+    return DOMPurify.sanitize(content); // Gunakan DOMPurify untuk membersihkan HTML
 }
 
-// Function to update HTML element content with sanitized input
+// Berfungsi untuk memperbarui konten elemen HTML dengan input yang dibersihkan
 function updateElement(elementId, content) {
     document.getElementById(elementId).innerHTML = content;
 }
 
-// Function to make an AJAX request with retry logic
+// Berfungsi untuk membuat permintaan AJAX dengan logika coba lagi
 function makeRequest(inputUrl, retries = 4) {
     $.ajax({
         url: `https://vkrdownloader.vercel.app/server?vkr=${inputUrl}`,
@@ -71,21 +71,21 @@ function makeRequest(inputUrl, retries = 4) {
             }
         },
         complete: function () {
-            document.getElementById("downloadBtn").disabled = false; // Re-enable the button
+            document.getElementById("downloadBtn").disabled = false; // Aktifkan kembali tombol tersebut
         }
     });
 }
 
-// Event listener for the "Download" button with debouncing and request retry logic
+// Pemroses peristiwa untuk tombol "Unduh" dengan logika debouncing dan permintaan percobaan ulang
     document.getElementById("downloadBtn").addEventListener("click", debounce(function () {
     document.getElementById("loading").style.display = "initial";
-    document.getElementById("downloadBtn").disabled = true; // Disable the button
+    document.getElementById("downloadBtn").disabled = true; // Nonaktifkan tombolnya
 
     const inputUrl = document.getElementById("inputUrl").value;
-    makeRequest(inputUrl); // Make the AJAX request with retry logic
-}, 300));  // Adjust the delay as needed
+    makeRequest(inputUrl); // Buat permintaan AJAX dengan logika coba lagi
+}, 300));  // Sesuaikan penundaan sesuai kebutuhan
 
-// Function to handle successful AJAX response
+// Berfungsi untuk menangani respons AJAX yang berhasil
 function handleSuccessResponse(data, inputUrl) {
     document.getElementById("container").style.display = "block";
     document.getElementById("loading").style.display = "none";
@@ -93,7 +93,7 @@ function handleSuccessResponse(data, inputUrl) {
     if (data.data) {
         const videoData = data.data;
 
-        // Handle thumbnail with cache busting and HTTPS check
+        // Tangani thumbnail dengan penghilangan cache dan pemeriksaan HTTPS
         const thumbnailUrl = videoData.thumbnail;
         const downloadUrls = videoData.downloads.map(download => download.url);
         const videoSource = videoData.source;
@@ -122,7 +122,7 @@ function handleSuccessResponse(data, inputUrl) {
     }
 }
 
-// Function to generate download buttons with dynamic colors and labels
+// Berfungsi untuk menghasilkan tombol unduh dengan warna dan label dinamis
 function generateDownloadButtons(videoData) {
     const downloadContainer = document.getElementById("download");
     downloadContainer.innerHTML = "";
@@ -131,7 +131,7 @@ function generateDownloadButtons(videoData) {
         const downloads = videoData.data.downloads;
         const videoSource = videoData.data.source;
 
-        // Add YouTube specific button if applicable
+        // Tambahkan tombol khusus YouTube jika ada
         const videoId = getYouTubeVideoIds(videoSource);
         if (videoId) {
             downloadContainer.innerHTML += `
@@ -140,7 +140,7 @@ function generateDownloadButtons(videoData) {
                 </a>`;
         }
 
-        // Generate download buttons for available formats
+        // Hasilkan tombol unduh untuk format yang tersedia
         downloads.forEach(download => {
             if (download && download.url) {
                 const downloadUrl = download.url;
@@ -155,7 +155,7 @@ function generateDownloadButtons(videoData) {
             }
         });
 
-        // Add iframes for additional download options, only if YouTube video source
+        // Tambahkan iframe untuk opsi pengunduhan tambahan, hanya jika sumber video YouTube
         if (videoId) {
             ["mp3", "360", "720", "1080"].forEach(quality => {
                 downloadContainer.innerHTML += `
@@ -175,7 +175,7 @@ function generateDownloadButtons(videoData) {
     }
 }
 
-// Function to get a parameter by name from a URL
+// Berfungsi untuk mendapatkan parameter berdasarkan nama dari URL
 function getParameterByName(name, url) {
     name = name.replace(/[]/g, '\\$&');
     const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`);
