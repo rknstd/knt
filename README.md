@@ -1,52 +1,100 @@
-# VKrDownloader 
+# 🎬 KNT Video Downloader
 
-Video Downloader by  Vijay Kumar @TheOfficialVKr ....
+Fast, free, and easy-to-use online video downloader supporting YouTube, TikTok, Instagram, and more!
 
-Download Video From
-<li> YouTube </li> <li>  Facebook  </li> <li> Twitter  </li> <li> Instagram (reel)  </li> <li> TikTok  </li> <li>And  1000+ Other Website in All Audio / Video Quality ...
- </li>
+![KNT Downloader](logo.png)
 
+## ✨ Features
 
-# Check All Updates Here: 
-[https://github.com/theofficialvkr/VKRdownloader/blob/main/updates.md](https://github.com/theofficialvkr/VKRdownloader/blob/main/updates.md)
+- ⚡ **Fast Downloads** - Multiple server options for quick downloads
+- 🆓 **100% Free** - No registration or payment required
+- 🔒 **Safe & Secure** - Private downloads with no data collection
+- 🌐 **Multi-Platform** - Supports YouTube, TikTok, Instagram, and more
+- 📱 **Responsive Design** - Works perfectly on mobile and desktop
+- 🎨 **Modern UI** - Beautiful gradient design with smooth animations
 
+## 🚀 Live Demo
 
-# How To Install 
+Visit: [knt.vercel.app](https://knt.vercel.app)
 
-Step 1 - Upload zip Files ...
+## 🛠️ How to Use
 
-Step 2 - unzip file on your server / hosting file manager ..
+1. Copy the URL of the video you want to download
+2. Paste it into the input field
+3. Click "Download Video"
+4. Wait for processing
+5. Click the download button to save your video!
 
-Step 3 - it work on almost all hosting (free/paid) so don't care about requirement ...
+## 💻 Local Development
 
-Step 4 - Thats it !
+```bash
+# Clone the repository
+git clone https://github.com/neionri/knt.git
 
-Open Your Site And it start Working ....
+# Navigate to directory
+cd knt
 
+# Open in browser
+start index.html  # Windows
+open index.html   # Mac
+xdg-open index.html  # Linux
+```
 
-# Demo : 
-https://theofficialvkr.github.io/VKRdownloader/
+## 🔧 Technical Details
 
-# For Any kind of Help 
+### API Endpoints
+The application uses multiple API endpoints with automatic fallback:
+1. **Cobalt API** (Primary) - Fast and reliable
+2. **Cobalt API v2** (Secondary) - Backup endpoint
+3. **VKR Downloader** (Fallback) - Legacy support
 
+### Technologies Used
+- HTML5
+- CSS3 (Modern gradients & animations)
+- JavaScript (ES6+)
+- jQuery
+- Bootstrap 4
+- DOMPurify (Security)
 
-Contact me On Mail      :  <li>contactvkr@yahoo.com   </li> 
-Or On Social media 
-  <li>
-<a href="https://instagram.com/theofficialvkr"> 
-Instagram </a>
- </li> <li>
-<a href="https://twitter.com/theofficialvkr"> 
-Twitter </a> </li> <li>
-  <a href="https://facebook.com/theofficialvkr"> 
-Facebook </a> </li> <li>
-  <a href="https://t.me/theofficialvkr"> 
-Telegram  </a> </li> <li>
+## 📝 Recent Updates
 
+### Version 2.0 (Latest)
+- ✅ Multiple API endpoints with automatic fallback
+- ✅ Improved error handling with detailed messages
+- ✅ Modern UI redesign with gradient backgrounds
+- ✅ Better mobile responsiveness
+- ✅ Enhanced loading animations
+- ✅ Retry logic for failed requests
 
-<a href="https://www.buymeacoffee.com/theofficialvkr"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=theofficialvkr&button_colour=BD5FFF&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00"></a>
-</li> 
+## ⚠️ Important Notes
 
-# At Last Remember 
+- YouTube frequently updates their systems to prevent video downloads
+- Some videos may not be downloadable due to copyright restrictions
+- Download speeds depend on your internet connection and server load
+- This tool is for personal use only - respect copyright laws
 
-i am not the Developer 👍
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to:
+- Report bugs
+- Suggest new features
+- Submit pull requests
+
+## 📧 Contact
+
+- Instagram: [@ariasu._](https://instagram.com/ariasu._)
+- WhatsApp: [+6285606926619](https://wa.me/6285606926619)
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Original VKR Downloader by [@theofficialvkr](https://github.com/theofficialvkr)
+- Cobalt API for video processing
+- Bootstrap for UI framework
+
+---
+
+**Made with ❤️ by [ariasu._](https://instagram.com/ariasu._)**

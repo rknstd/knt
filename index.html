@@ -15,7 +15,7 @@
 <body>
   <header class="bg-dark text-white">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">KNT Downloader</a>
+      <a class="navbar-brand" href="#">Neionri Downloader</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -23,8 +23,8 @@
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active"><a class="nav-link" href="#">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Service</a></li>
-          <li class="nav-item"><a class="nav-link" href="https://instagram.com/ariasu._">Follow</a></li>
-          <li class="nav-item"><a class="nav-link" href="https://wa.me/6285606926619">Contact</a></li>
+          <li class="nav-item"><a class="nav-link" href="https://github.com/neionri">GitHub</a></li>
+          <li class="nav-item"><a class="nav-link" href="https://instagram.com/neionri">Follow</a></li>
         </ul>
       </div>
     </nav>
@@ -34,9 +34,10 @@
     <div class="row">
       <div class="col-md-10 mx-auto">
         <div class="form-group">
-          <input id="inputUrl" type="url" class="form-control" placeholder="Enter URL">
+          <input id="inputUrl" type="url" class="form-control" placeholder="Paste YouTube, TikTok, Instagram, or other video URL here..." required>
         </div>
-        <button id="downloadBtn" onclick="openbox()" type="submit" class="btn btn-primary">Download</button>
+        <button id="downloadBtn" onclick="openbox()" type="submit" class="btn btn-primary btn-lg">📥 Download Video</button>
+        <div id="errorMessage" class="alert alert-danger mt-3" style="display: none;"></div>
       </div>
     </div>
 
@@ -75,15 +76,29 @@
     </div>
 
     <div id="content" class="text-center mt-3">
-      <h2>Online Download Videos</h2>
-      <p>
-        KNT downloader - Video Downloader by ariasu._ is an excellent service that helps to download online videos, Thumbnails, and music quickly and free of charge...
+      <h2>🎬 Online Video Downloader</h2>
+      <p class="lead">
+        KNT downloader - Download videos from YouTube, TikTok, Instagram, and more! Fast, free, and easy to use.
       </p>
+      <div class="row mt-4">
+        <div class="col-md-4">
+          <h5>⚡ Fast</h5>
+          <p>Quick downloads with multiple server options</p>
+        </div>
+        <div class="col-md-4">
+          <h5>🆓 Free</h5>
+          <p>100% free, no registration required</p>
+        </div>
+        <div class="col-md-4">
+          <h5>🔒 Safe</h5>
+          <p>Secure and private downloads</p>
+        </div>
+      </div>
     </div>
   </div>
   <br></br><br></br><br></br>
   <footer class="bg-dark text-white text-center py-3 mt-5">
-    Powered By ariasu._
+    Made with ❤️ by <a href="https://github.com/neionri" style="color: #667eea; text-decoration: none;">Neionri</a>
   </footer>
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

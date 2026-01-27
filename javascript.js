@@ -47,33 +47,152 @@ function updateElement(elementId, content) {
     document.getElementById(elementId).innerHTML = content;
 }
 
-// Berfungsi untuk membuat permintaan AJAX dengan logika coba lagi
-function makeRequest(inputUrl, retries = 4) {
-    $.ajax({
-        url: `https://vkrdownloader.vercel.app/server?vkr=${inputUrl}`,
-        type: "GET",
-        cache: true,
-        async: true,
-        crossDomain: true,
-        dataType: 'json',
-        jsonp: true,
-        success: function (data) {
-            handleSuccessResponse(data, inputUrl);
-        },
-        error: function(xhr, status, error) {
-            if (retries > 0) {
-                console.log(`Retrying... (${retries} attempts left)`);
-                makeRequest(inputUrl, retries - 1);
-            } else {
-                console.error(`Error Details: Status - ${status}, Error - ${error}, XHR Status - ${xhr.status}`);
-                alert("Unable to fetch the download link after several attempts. Please check the URL or try again later.");
-                document.getElementById("loading").style.display = "none";
+// API endpoints dengan fallback
+const API_ENDPOINTS = [
+    'https://api.cobalt.tools/api/json',
+    'https://api-v2.cobalt.tools/api/json',
+    'https://vkrdownloader.vercel.app/server?vkr='
+];
+
+let currentApiIndex = 0;
+
+// Berfungsi untuk membuat permintaan AJAX dengan logika coba lagi dan fallback API
+function makeRequest(inputUrl, retries = 3, apiIndex = 0) {
+    currentApiIndex = apiIndex;
+    
+    // Untuk Cobalt API (index 0 dan 1)
+    if (apiIndex < 2) {
+        $.ajax({
+            url: API_ENDPOINTS[apiIndex],
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                url: inputUrl,
+                vCodec: "h264",
+                vQuality: "720",
+                aFormat: "mp3",
+                filenamePattern: "classic",
+                isAudioOnly: false
+            }),
+            success: function (data) {
+                if (data.status === "redirect" || data.status === "tunnel") {
+                    // Cobalt API berhasil
+                    handleCobaltResponse(data, inputUrl);
+                } else if (data.status === "error") {
+                    console.error("Cobalt API Error:", data.text);
+                    tryNextApi(inputUrl, retries, apiIndex);
+                } else {
+                    handleCobaltResponse(data, inputUrl);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(`API ${apiIndex} Error:`, status, error);
+                tryNextApi(inputUrl, retries, apiIndex);
             }
-        },
-        complete: function () {
-            document.getElementById("downloadBtn").disabled = false; // Aktifkan kembali tombol tersebut
-        }
-    });
+        });
+    } else {
+        // Fallback ke VKR API (index 2)
+        $.ajax({
+            url: `${API_ENDPOINTS[apiIndex]}${inputUrl}`,
+            type: "GET",
+            cache: true,
+            async: true,
+            crossDomain: true,
+            dataType: 'json',
+            jsonp: true,
+            success: function (data) {
+                handleSuccessResponse(data, inputUrl);
+            },
+            error: function(xhr, status, error) {
+                if (retries > 0) {
+                    console.log(`Retrying API ${apiIndex}... (${retries} attempts left)`);
+                    setTimeout(() => makeRequest(inputUrl, retries - 1, apiIndex), 1000);
+                } else {
+                    showDetailedError(xhr, status, error);
+                }
+            },
+            complete: function () {
+                document.getElementById("downloadBtn").disabled = false;
+            }
+        });
+    }
+}
+
+// Coba API berikutnya jika yang sekarang gagal
+function tryNextApi(inputUrl, retries, currentIndex) {
+    const nextIndex = currentIndex + 1;
+    if (nextIndex < API_ENDPOINTS.length) {
+        console.log(`Trying next API endpoint (${nextIndex})...`);
+        setTimeout(() => makeRequest(inputUrl, retries, nextIndex), 500);
+    } else if (retries > 0) {
+        console.log(`Retrying from first API... (${retries} attempts left)`);
+        setTimeout(() => makeRequest(inputUrl, retries - 1, 0), 1000);
+    } else {
+        showDetailedError(null, "All APIs failed", "No working endpoint found");
+    }
+}
+
+// Handle response dari Cobalt API
+function handleCobaltResponse(data, inputUrl) {
+    document.getElementById("container").style.display = "block";
+    document.getElementById("loading").style.display = "none";
+    
+    if (data.status === "redirect" && data.url) {
+        // Direct download URL
+        const videoId = getYouTubeVideoIds(inputUrl);
+        const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '';
+        
+        const videoHtml = thumbnailUrl ? `
+            <video style='background: black url(${thumbnailUrl}) center center/cover no-repeat; width:100%; height:500px; border-radius:20px;' 
+                   poster='${thumbnailUrl}' controls playsinline>
+                <source src='${data.url}' type='video/mp4'>
+            </video>` : `<p>Video ready for download!</p>`;
+        
+        updateElement("thumb", videoHtml);
+        updateElement("title", "<h3>Video Ready</h3>");
+        updateElement("description", "");
+        updateElement("duration", "");
+        
+        const downloadContainer = document.getElementById("download");
+        downloadContainer.innerHTML = `
+            <a href='${data.url}' download>
+                <button class='dlbtns' style='background:green; padding:15px 30px; font-size:18px;'>
+                    📥 Download Video
+                </button>
+            </a>`;
+    } else if (data.status === "tunnel" && data.url) {
+        // Tunnel URL (streaming)
+        handleCobaltResponse({status: "redirect", url: data.url}, inputUrl);
+    } else {
+        alert("Unable to process this video. Trying alternative method...");
+        tryNextApi(inputUrl, 2, currentApiIndex);
+    }
+}
+
+// Tampilkan error yang lebih detail
+function showDetailedError(xhr, status, error) {
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("downloadBtn").disabled = false;
+    
+    let errorMessage = "❌ Download gagal!\n\n";
+    
+    if (status === "timeout") {
+        errorMessage += "Server tidak merespons. Coba lagi dalam beberapa saat.";
+    } else if (status === "error" && xhr && xhr.status === 0) {
+        errorMessage += "Tidak bisa terhubung ke server. Periksa koneksi internet Anda.";
+    } else if (error.includes("No working endpoint")) {
+        errorMessage += "Semua server sedang down atau overload.\n\n";
+        errorMessage += "💡 Saran:\n";
+        errorMessage += "1. Coba lagi dalam beberapa menit\n";
+        errorMessage += "2. Periksa apakah URL video valid\n";
+        errorMessage += "3. Hubungi @neionri di GitHub untuk bantuan";
+    } else {
+        errorMessage += `Error: ${error}\n\n`;
+        errorMessage += "Coba URL yang berbeda atau hubungi support.";
+    }
+    
+    alert(errorMessage);
+    console.error(`Error Details: Status - ${status}, Error - ${error}`, xhr);
 }
 
 // Pemroses peristiwa untuk tombol "Unduh" dengan logika debouncing dan permintaan percobaan ulang
@@ -117,7 +236,7 @@ function handleSuccessResponse(data, inputUrl) {
 
         generateDownloadButtons(data);
     } else {
-        alert("Issue: Unable to retrieve the download link. Please check the URL and contact us on Social Media @ariasu._");
+        alert("Issue: Unable to retrieve the download link. Please check the URL and contact us on GitHub @neionri");
         document.getElementById("loading").style.display = "none";
     }
 }
@@ -169,7 +288,7 @@ function generateDownloadButtons(videoData) {
     }
 
     if (downloadContainer.innerHTML === "") {
-        alert("Server Down due to Too Many Requests. Please contact us on Social Media @ariasu._");
+        alert("Server Down due to Too Many Requests. Please contact us on GitHub @neionri");
         document.getElementById("container").style.display = "none";
         location.href = `https://vkrdownloader.vercel.app/download.php?vkr=${inputUrl}`;
     }
